@@ -4,8 +4,8 @@ export const ColorPalette = ({
   colors,
   blockedColors,
   onBlockColor,
-  // likedColors,
-  // onLikeColor,
+  likedColors,
+  onLikeColor,
 }) => {
   return (
     <div className='flex-1 flex flex-col sm:flex-row'>
@@ -14,9 +14,9 @@ export const ColorPalette = ({
           key={index}
           color={color}
           onBlock={() => onBlockColor(index)}
-          isBlocked={blockedColors.includes(color)}
-          // isLiked={likedColors.includes(color)} // Pasar si el color está "liked"
-          // onLike={() => onLikeColor(color)} // Pasar la función para alternar "like"
+          isBlocked={blockedColors[index]}
+          isLiked={likedColors.includes(color)} // Pasar si el color está "liked"
+          onLike={() => onLikeColor(color)} // Pasar la función para alternar "like"
         />
       ))}
     </div>

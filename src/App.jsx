@@ -7,6 +7,8 @@ import { generatePalette } from './utils/generatePalette';
 const App = () => {
   const [colors, setColors] = useState(new Array(5).fill('')); // Paleta generada
   const [blockedColors, setBlockedColors] = useState(new Array(5).fill(false)); // Estados de bloqueo
+  const [likedColors, setLikedColors] = useState([]); // Colores "liked"
+  console.log(likedColors);
 
   // Función para generar una nueva paleta respetando los colores bloqueados
   const generateNewPalette = useCallback(() => {
@@ -19,8 +21,7 @@ const App = () => {
   // Generar la paleta inicial al cargar la aplicación
   useEffect(() => {
     generateNewPalette(); // Genera la paleta inicial
-  }, []); // Ahora agregamos `generateNewPalette` como dependencia
-
+  }, []);
   // Escuchar la barra espaciadora para cambiar la paleta
   useEffect(() => {
     const handleKeyPress = (event) => {
@@ -43,6 +44,13 @@ const App = () => {
     setBlockedColors(updatedBlockedColors);
   };
 
+  const handleLikeColor = (color) => {
+    const updateLikedColors = likedColors.includes(color)
+      ? likedColors.filter((likedColor) => likedColor !== color)
+      : [...likedColors, color];
+    setLikedColors(updateLikedColors);
+  };
+
   return (
     <div className='flex flex-col h-screen'>
       <Navbar />
@@ -50,6 +58,8 @@ const App = () => {
         colors={colors} // Paleta actual
         blockedColors={blockedColors} // Estados de bloqueo
         onBlockColor={handleBlockColor} // Función para bloquear/desbloquear colores
+        likedColors={likedColors} // Colores "liked"
+        onLikeColor={handleLikeColor} // Función para alternar "like"
       />
       <Footer />
     </div>
