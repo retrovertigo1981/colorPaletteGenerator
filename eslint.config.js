@@ -35,8 +35,8 @@ export default [
         'warn',
         { allowConstantExport: true },
       ],
-      // Añade esta configuración para prop-types
-      'react/prop-types': 'off', // o 'warn' si prefieres que solo muestre advertencias
+
+      'react/prop-types': 'off',
       'react-hooks/exhaustive-deps': 'warn',
     },
   },
