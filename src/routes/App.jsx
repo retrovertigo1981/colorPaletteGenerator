@@ -16,7 +16,7 @@ const App = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   const isMobile = useIsMobile();
-  const firstRender = useRef(true);
+  // const firstRender = useRef(true);
 
   // Función para generar una nueva paleta respetando los colores bloqueados
   const generateNewPalette = useCallback(async () => {
@@ -36,10 +36,10 @@ const App = () => {
 
   // Generar la paleta inicial solo una vez al montar el componente
   useEffect(() => {
-    if (firstRender.current) {
-      firstRender.current = false;
-      return;
-    }
+    // if (firstRender.current) {
+    //   firstRender.current = false;
+    //   return;
+    // }
     generateNewPalette();
   }, []);
 
