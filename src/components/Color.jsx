@@ -1,5 +1,4 @@
 import { useState } from "react";
-
 import { Copy, Lock, LockOpen, Heart, CheckCircle2 } from "lucide-react";
 import { useIsMobile } from "../hooks/useIsMobile.js";
 
@@ -8,7 +7,7 @@ const Color = ({
   colorName,
   onBlock,
   isBlocked,
-  isLiked,
+  // isLiked,
   onLike,
   fontColor,
 }) => {
@@ -79,10 +78,7 @@ const Color = ({
         <div onClick={onLike} className="p-2 sm:p-2 bg-transparent">
           <Heart
             size={16}
-            className={`sm:w-5 sm:h-5 ${
-              fontColor === true ? "text-gray-700" : "text-gray-200"
-            } ${isLiked ? "text-red-700" : "none"} `}
-            fill={isLiked ? "red" : "none"}
+            className={`sm:w-5 sm:h-5 ${fontColor === true ? "text-gray-700" : "text-gray-200"}`}
           />
         </div>
       </div>

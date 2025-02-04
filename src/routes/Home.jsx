@@ -3,10 +3,10 @@ import { Button } from "../components/Button";
 import { useNavigate } from "react-router-dom";
 
 const Home = () => {
-  const navegate = useNavigate();
+  const navigate = useNavigate();
 
   const handleButtonClick = () => {
-    navegate("/generate");
+    navigate("/generate");
   };
 
   return (
@@ -36,7 +36,7 @@ const Home = () => {
 
       <Navbar />
       {/* Fondo animado */}
-      <div className="fixed inset-0 overflow-hidden -z-10">
+      <div className="fixed inset-0 overflow-hidden -z-30">
         {/* Capa de overlay para mejorar el contraste */}
         <div className="absolute inset-0 bg-black/5 backdrop-blur-xl"></div>
 
@@ -52,7 +52,7 @@ const Home = () => {
       </div>
 
       {/* Contenido principal con mejor contraste */}
-      <div className="grid place-content-center h-screen fixed inset-0">
+      <div className="grid place-content-center h-full fixed inset-0 -z-20">
         <div className="grid place-items-center px-4 md:px-8">
           <h1 className="text-center font-extrabold text-4xl md:text-6xl mb-2 text-white drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)]">
             Bienvenidos a Colorsitos.app

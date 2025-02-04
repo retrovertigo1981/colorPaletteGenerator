@@ -1,46 +1,78 @@
 import chroma from 'chroma-js';
 
-function generatePalette(basecolor) {
-  // Función para generar color aleatorio
-  const generateRandomColor = () => chroma.random().hex();
-
-  // Validación y asignación del color base
-  if (!basecolor || !chroma.valid(basecolor)) {
-    basecolor = generateRandomColor();
-  }
-
-  // Función para ajustar la saturación dentro de límites razonables
-  const adjustSaturation = (color) => {
-    const s = chroma(color).get('hsl.s');
-    if (s > 0.9) return chroma(color).set('hsl.s', 0.9);
-    if (s < 0.2) return chroma(color).set('hsl.s', 0.2);
-    return chroma(color);
+function generatePalette(baseColor) {
+  // Generar color aleatorio en HCL con parámetros controlados
+  const generateRandomColor = () => {
+    return chroma
+      .hcl(
+        Math.random() * 360,       // Hue
+        40 + Math.random() * 40,   // Croma (saturación controlada)
+        50 + Math.random() * 30    // Luminosidad balanceada
+      )
+      .hex();
   };
 
-  // Generar colores análogos con mayor separación y ajuste de saturación
+  // Validar y normalizar color base
+  if (!baseColor || !chroma.valid(baseColor)) {
+    baseColor = generateRandomColor();
+  }
+
+  // Convertir a HCL para mejor manipulación perceptual
+  let [h, c, l] = chroma(baseColor).hcl();
+
+  // Ajustar parámetros base para mejor equilibrio
+  c = Math.min(Math.max(c, 30), 70);
+  l = Math.min(Math.max(l, 30), 70);
+  baseColor = chroma.hcl(h, c, l).hex();
+
+  // Función para generar variaciones armónicas
+  const generateVariation = (hueShift, cMult = 1, lMult = 1) => {
+    return chroma
+      .hcl(
+        (h + hueShift) % 360,
+        Math.min(c * cMult, 80),
+        Math.min(l * lMult, 80)
+      )
+      .hex();
+  };
+
+  // Generar colores análogos con variación luminosa
   const analogous = [
-    adjustSaturation(chroma(basecolor).set('hsl.h', '+30')).hex(),
-    adjustSaturation(chroma(basecolor).set('hsl.h', '-30')).hex(),
+    generateVariation(30, 0.9, 1.1),  // Más claro
+    generateVariation(-30, 0.9, 0.9)  // Más oscuro
   ];
 
-  // Generar complementario con ajustes de saturación y luminosidad
-  const complementary = chroma(basecolor)
-    .set('hsl.h', '+180')
-    .saturate(0.1)
-    .hex();
+  // Complementario con ajuste perceptual
+  const complementary = generateVariation(180, 1.1, 0.8);
 
-  // Versión más clara con ajustes más sutiles
-  const lighter = chroma(basecolor).brighten(0.7).desaturate(0.1).hex();
+  // Versión más clara (tinte)
+  const tint = generateVariation(0, 0.6, 1.4);
 
-  // Combinar y retornar la paleta
-  const palette = [basecolor, ...analogous, complementary, lighter];
+  // Versión más oscura (sombra)
+  const shade = generateVariation(0, 0.6, 0.6);
 
-  // Asegurar que todos los colores tengan saturación adecuada
-  const adjustedPalette = palette.map((color) =>
-    adjustSaturation(chroma(color)).hex()
-  );
+  // Construir paleta balanceada
+  const palette = [
+    baseColor,
+    ...analogous,
+    complementary,
+    tint,
+    shade
+  ];
 
-  return adjustedPalette.slice(0, 5);
+  // Ajuste final para cohesión
+  return palette
+    .map(color => {
+      const [h, c, l] = chroma(color).hcl();
+      return chroma
+        .hcl(
+          h,
+          Math.min(Math.max(c, 25), 75),  // Saturación controlada
+          Math.min(Math.max(l, 20), 80)   // Luminosidad balanceada
+        )
+        .hex();
+    })
+    .slice(0, 5);  // Garantizar 5 colores
 }
 
-export { generatePalette };
+export { generatePalette }; 

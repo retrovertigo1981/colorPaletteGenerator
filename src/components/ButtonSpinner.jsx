@@ -1,12 +1,9 @@
-const Spinner = () => {
+const ButtonSpinner = () => {
   return (
-    <div
-      role="status"
-      className="w-full h-full rounded-md flex flex-col justify-center items-center bg-white relative z-10 "
-    >
+    <div role="status">
       <svg
         aria-hidden="true"
-        className=" w-20 h-20 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600"
+        className="inline w-4 h-4 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600"
         viewBox="0 0 100 101"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
@@ -20,9 +17,9 @@ const Spinner = () => {
           fill="currentFill"
         />
       </svg>
-      <span className="mt-3">Loading...</span>
+      <span className="sr-only">Loading...</span>
     </div>
   );
 };
 
-export { Spinner };
+export { ButtonSpinner };

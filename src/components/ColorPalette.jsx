@@ -10,7 +10,7 @@ export const ColorPalette = ({
   getFontColor,
 }) => {
   return (
-    <div className="flex-1 flex flex-col md:flex-row ">
+    <div className="flex-1 flex flex-col md:flex-row z-30">
       {colors.map((color, index) => (
         <Color
           key={index}
