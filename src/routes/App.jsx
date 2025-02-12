@@ -11,7 +11,9 @@ import { Spinner } from "../components/Spinner.jsx";
 import { UserInfoToast } from "../components/UserInfoToast.jsx";
 import { LikedColorModal } from "../components/LikedColorModal.jsx";
 import { SuccessSaveToast } from "../components/SuccessSaveToast.jsx";
+import { Alert } from "../components/Alert.jsx";
 import { Keyboard } from "lucide-react";
+import { useAuth } from "../hooks/useAuth";
 
 const App = () => {
   const [colors, setColors] = useState(new Array(5).fill(""));
@@ -22,7 +24,10 @@ const App = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [showModal, setShowModal] = useState(true);
   const [showSaveToast, setShowSaveToast] = useState(false);
+  const [showAlert, setShowAlert] = useState(false);
+  console.log(showAlert);
 
+  const { user } = useAuth();
   const isMobile = useIsMobile();
   const navigate = useNavigate();
   const { palette } = useParams();
@@ -102,6 +107,7 @@ const App = () => {
   };
 
   const handleLikeColor = (color) => {
+    if (!user) return setShowAlert(true);
     const updateLikedColors = likedColors.includes(color)
       ? likedColors.filter((likedColor) => likedColor !== color)
       : [...likedColors, color];
@@ -126,8 +132,13 @@ const App = () => {
     setTimeout(() => setShowSaveToast(false), 2000);
   };
 
+  const handleCloseAlert = () => {
+    setShowAlert(false);
+    console.log(showAlert);
+  };
+
   return (
-    <div className="flex flex-col h-screen">
+    <div className="flex flex-col h-screen relative">
       <Navbar />
       {isLoading ? (
         <Spinner />
@@ -158,6 +169,17 @@ const App = () => {
       )}
       {isMobile && <Footer generateNewPalette={generateNewPalette} />}
       {showSaveToast && <SuccessSaveToast />}
+      {showAlert && (
+        <Alert
+          message="Para guardar un color, primero tienes que"
+          links={[
+            { to: "/login", text: "iniciar sesión" },
+            { to: "/register", text: "Registrarse" },
+          ]}
+          onClose={handleCloseAlert}
+          variant="warning"
+        />
+      )}
     </div>
   );
 };
