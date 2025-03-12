@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, useLocation } from "react-router-dom";
 import { Navbar } from "../components/Navbar.jsx";
 import { ColorPalette } from "../components/ColorPalette.jsx";
 import { Footer } from "../components/Footer.jsx";
@@ -10,9 +10,11 @@ import { useIsMobile } from "../hooks/useIsMobile.js";
 import { Spinner } from "../components/Spinner.jsx";
 import { UserInfoToast } from "../components/UserInfoToast.jsx";
 import { LikedColorModal } from "../components/LikedColorModal.jsx";
-import { SuccessSaveToast } from "../components/SuccessSaveToast.jsx";
+import { SuccessToast } from "../components/SuccessToast.jsx";
+import { CopyPaletteUrl } from "../components/CopyPaletteUrl.jsx";
+import { SavePalette } from "../components/SavePalette.jsx";
 import { Alert } from "../components/Alert.jsx";
-import { Keyboard } from "lucide-react";
+import { Keyboard, Save } from "lucide-react";
 import { useAuth } from "../hooks/useAuth";
 
 const App = () => {
@@ -23,14 +25,19 @@ const App = () => {
   const [showColorModal, setShowColorModal] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [showModal, setShowModal] = useState(true);
-  const [showSaveToast, setShowSaveToast] = useState(false);
+  const [showSuccessToast, setShowSuccessToast] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
-  console.log(showAlert);
+  const [showCopyUrl, setShowCopyUrl] = useState(false);
+  const [showToastUrl, setShowToastUrl] = useState(false);
+  const [showSavePalette, setShowSavePalette] = useState(false);
+  // console.log(showAlert);
 
   const { user } = useAuth();
   const isMobile = useIsMobile();
   const navigate = useNavigate();
   const { palette } = useParams();
+  const location = useLocation();
+  const fullUrl = window.location.origin + location.pathname;
 
   const updateUrlWithColors = (colors) => {
     const colorString = colors.map((color) => color.replace("#", "")).join("-");
@@ -88,7 +95,12 @@ const App = () => {
   // Escuchar la barra espaciadora para ambiar la paleta
   useEffect(() => {
     const handleKeyPress = (event) => {
-      if (event.code === "Space" && !showColorModal) {
+      if (
+        event.code === "Space" &&
+        !showColorModal &&
+        !showCopyUrl &&
+        !showSavePalette
+      ) {
         event.preventDefault();
         generateNewPalette();
       }
@@ -98,7 +110,7 @@ const App = () => {
     return () => {
       window.removeEventListener("keydown", handleKeyPress);
     };
-  }, [generateNewPalette, showColorModal]);
+  }, [generateNewPalette, showColorModal, showCopyUrl, showSavePalette]);
 
   const handleBlockColor = (index) => {
     const updatedBlockedColors = [...blockedColors];
@@ -124,22 +136,49 @@ const App = () => {
     setShowModal(false);
   };
 
-  const handleSaveColor = () => {
+  const handleSave = () => {
     // Mostrar el toast de guardado
-    setShowSaveToast(true);
+    setShowSuccessToast(true);
 
     // Ocultar el toast después de 3 segundos
-    setTimeout(() => setShowSaveToast(false), 2000);
+    setTimeout(() => setShowSuccessToast(false), 2000);
   };
 
   const handleCloseAlert = () => {
     setShowAlert(false);
-    console.log(showAlert);
+    // console.log(showAlert);
+  };
+
+  const toggleShowCopyURL = () => {
+    setShowCopyUrl(!showCopyUrl);
+  };
+
+  const handleCopy = (e) => {
+    e.preventDefault();
+    navigator.clipboard.writeText(fullUrl);
+    setShowCopyUrl(false);
+    setShowToastUrl(true);
+    setTimeout(() => setShowToastUrl(false), 2000);
+  };
+
+  const toggleSavePalette = () => {
+    setShowSavePalette(!showSavePalette);
   };
 
   return (
     <div className="flex flex-col h-screen relative">
-      <Navbar />
+      <Navbar
+        onToggleUrl={toggleShowCopyURL}
+        onToggleSavePalette={toggleSavePalette}
+      />
+      {showCopyUrl && (
+        <CopyPaletteUrl
+          onToggle={toggleShowCopyURL}
+          url={fullUrl}
+          onCopy={handleCopy}
+        />
+      )}
+
       {isLoading ? (
         <Spinner />
       ) : (
@@ -157,7 +196,7 @@ const App = () => {
         <LikedColorModal
           onClick={handleCloseColorModal}
           color={likedColors[0].toUpperCase()}
-          onSave={handleSaveColor}
+          onSave={handleSave}
         />
       )}
       {showModal && !isMobile && (
@@ -167,8 +206,20 @@ const App = () => {
           icon={<Keyboard />}
         />
       )}
-      {isMobile && <Footer generateNewPalette={generateNewPalette} />}
-      {showSaveToast && <SuccessSaveToast />}
+      {isMobile && (
+        <Footer
+          generateNewPalette={generateNewPalette}
+          onToggleUrl={toggleShowCopyURL}
+          onToggleSavePalette={toggleSavePalette}
+        />
+      )}
+      {showSuccessToast && (
+        <SuccessToast
+          icon={<Save className="w-4 h-4" />}
+          message={"Elemento Guardado exitosamente"}
+        />
+      )}
+      {showToastUrl && <SuccessToast message={"URL copiada al portapapeles"} />}
       {showAlert && (
         <Alert
           message="Para guardar un color, primero tienes que"
@@ -178,6 +229,14 @@ const App = () => {
           ]}
           onClose={handleCloseAlert}
           variant="warning"
+        />
+      )}
+      {showSavePalette && (
+        <SavePalette
+          colors={colors}
+          onClose={toggleSavePalette}
+          onSave={handleSave}
+          fullUrl={fullUrl}
         />
       )}
     </div>

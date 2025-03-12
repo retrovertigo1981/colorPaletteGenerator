@@ -1,14 +1,26 @@
-import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { Menu, X, LogIn, LogOut } from "lucide-react";
+import { useState, useEffect } from "react";
+import { Link, useNavigate, useLocation } from "react-router-dom";
+import { Menu, X, LogIn, LogOut, Share2, CloudUpload } from "lucide-react";
 import { useAuth } from "../hooks/useAuth";
 
-export const Navbar = () => {
+export const Navbar = ({ onToggleUrl, onToggleSavePalette }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [isGenerateUrl, setIsGenerateUrl] = useState(false);
   const { user, logout } = useAuth();
-  console.log(user);
+  // console.log(user);
   const navigate = useNavigate();
+  const location = useLocation();
+
+  useEffect(() => {
+    if (location.pathname.includes("generate")) {
+      setIsGenerateUrl(true);
+    } else {
+      setIsGenerateUrl(false);
+    }
+
+    console.log(isGenerateUrl);
+  }, [location, isGenerateUrl]);
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -28,7 +40,7 @@ export const Navbar = () => {
   };
 
   return (
-    <nav className="bg-white p-2 sm:p-4 z-40">
+    <nav className="bg-white p-2 sm:p-4 ">
       <div className="flex w-full justify-between items-center">
         {/* Logo y nombre */}
         <Link to="/" className="inline-block">
@@ -42,6 +54,26 @@ export const Navbar = () => {
 
         {/* Menú para pantallas grandes */}
         <ul className="hidden md:flex items-center space-x-4">
+          {isGenerateUrl && (
+            <>
+              {user && (
+                <li>
+                  <CloudUpload
+                    size={20}
+                    className="text-gray-800 hover:text-gray-600 cursor-pointer"
+                    onClick={onToggleSavePalette}
+                  />
+                </li>
+              )}
+              <li>
+                <Share2
+                  size={18}
+                  className="text-gray-800 hover:text-gray-600 cursor-pointer"
+                  onClick={onToggleUrl}
+                />
+              </li>
+            </>
+          )}
           <li>
             <Link to="/about" className="text-gray-800 hover:text-gray-600">
               About
@@ -89,7 +121,7 @@ export const Navbar = () => {
                   />
                 </button>
                 {isDropdownOpen && (
-                  <div className="absolute right-0 mt-2 w-44 bg-white rounded-lg shadow-lg">
+                  <div className="absolute z-50 right-0 mt-2 w-44 bg-white rounded-lg shadow-lg">
                     <div className="px-4 py-3 text-xs text-gray-900">
                       {user ? <div>{user.displayName}</div> : null}
                       <div className="text-sm">{user.email}</div>

@@ -2,21 +2,13 @@ import { useState } from "react";
 import { Copy, Lock, LockOpen, Heart, CheckCircle2 } from "lucide-react";
 import { useIsMobile } from "../hooks/useIsMobile.js";
 
-const Color = ({
-  color,
-  colorName,
-  onBlock,
-  isBlocked,
-  // isLiked,
-  onLike,
-  fontColor,
-}) => {
+const Color = ({ color, colorName, onBlock, isBlocked, onLike, fontColor }) => {
   const [isHovered, setIsHovered] = useState(false);
   const [isCopied, setIsCopied] = useState(false);
 
   const isMobile = useIsMobile();
 
-  const habdleColorClick = () => {
+  const handleColorClick = () => {
     if (isMobile) {
       setIsHovered(!isHovered);
     }
@@ -32,7 +24,7 @@ const Color = ({
     <div
       className="flex-1 min-h-[15vh] sm:h-full flex flex-col justify-center items-center relative"
       style={{ backgroundColor: color }}
-      onClick={habdleColorClick}
+      onClick={handleColorClick}
       onMouseEnter={() => !isMobile && setIsHovered(true)}
       onMouseLeave={() => !isMobile && setIsHovered(false)}
     >

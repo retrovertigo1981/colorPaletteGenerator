@@ -9,7 +9,7 @@ const RegisterComponent = () => {
     password: "",
   });
 
-  const { signUp } = useAuth();
+  const { signUp, loginWithGoogle, loginWithGithub } = useAuth();
   const navigate = useNavigate();
   const [errorRegister, setErrorRegister] = useState("");
   const [showAlert, setShowAlert] = useState(false);
@@ -21,6 +21,21 @@ const RegisterComponent = () => {
   const handleCloseAlert = () => {
     setShowAlert(false);
   };
+
+  const handleGoogleLogin = async (e) => {
+    e.preventDefault();
+    setShowAlert(false);
+    await loginWithGoogle();
+    navigate("/generate");
+  };
+
+  const handleGithubLogin = async (e) => {
+    e.preventDefault();
+    setShowAlert(false);
+    await loginWithGithub();
+    navigate("/generate");
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -111,6 +126,7 @@ const RegisterComponent = () => {
                   <button
                     type="submit"
                     className="w-32 sm:w-40 text-white bg-blue-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
+                    onClick={handleGoogleLogin}
                   >
                     <img
                       className="h-6 mx-auto"
@@ -121,6 +137,7 @@ const RegisterComponent = () => {
                   <button
                     type="submit"
                     className="w-32 sm:w-40 text-white bg-blue-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
+                    onClick={handleGithubLogin}
                   >
                     <img
                       className="h-6 mx-auto"

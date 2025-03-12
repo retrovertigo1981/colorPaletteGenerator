@@ -1,5 +1,4 @@
-import { Save } from "lucide-react";
-const SuccessSaveToast = () => {
+const SuccessToast = ({ message, icon }) => {
   return (
     <div
       id="toast-success"
@@ -19,12 +18,12 @@ const SuccessSaveToast = () => {
         <span className="sr-only">Check icon</span>
       </div>
       <div className="flex items-center ms-3 text-sm font-normal w-full">
-        <Save className="w-4 h-4" />
+        {icon}
         {""}
-        <p className=" ms-2"> Color Guardado exitosamente</p>
+        <p className=" ms-2"> {message}</p>
       </div>
     </div>
   );
 };
 
-export { SuccessSaveToast };
+export { SuccessToast };

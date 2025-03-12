@@ -1,17 +1,27 @@
 import { useState, useEffect } from "react";
 import { getDatabase, ref, onValue, remove } from "firebase/database";
 import { Navbar } from "../components/Navbar";
+import { DeleteColorModal } from "../components/DeleteColorModal";
+import { DeletePaletteModal } from "../components/DeletePaletteModal";
 import { CardColorFavorite } from "../components/CardColorFavorite";
+import { CardPaletteSaved } from "../components/CardPaletteSaved";
+import { SuccessToast } from "../components/SuccessToast";
 import { LayoutDashboard, PaintBucket, Palette } from "lucide-react";
 import { useAuth } from "../hooks/useAuth";
 
 const Dashboard = () => {
   const [favColors, setFavColors] = useState([]);
-  const { user } = useAuth();
-
+  const [favPalettes, setFavPalettes] = useState([]);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [showLikedColors, setShowLikedColors] = useState(true);
   const [showPalettes, setShowPalettes] = useState(false);
+  const [showDeleteCorlorModal, setShowDeleteColorModal] = useState(false);
+  const [showDeletePaletteModal, setShowDeletePaletteModal] = useState(false);
+  const [showToastUrl, setShowToastUrl] = useState(false);
+  const [colorHex, setColorHex] = useState("");
+  const [colorName, setColorName] = useState("");
+  const [palette, setPalette] = useState("");
+  const { user } = useAuth();
 
   const toggleSidebar = () => {
     return setIsSidebarOpen(!isSidebarOpen);
@@ -29,21 +39,54 @@ const Dashboard = () => {
     setIsSidebarOpen(false);
   };
 
+  const toggleDeleteModal = (color, nombre) => {
+    setShowDeleteColorModal(!showDeleteCorlorModal);
+    setColorHex(color);
+    setColorName(nombre);
+  };
+
+  const toggleDeletePaletteModal = (palette) => {
+    setShowDeletePaletteModal(!showDeletePaletteModal);
+    setPalette(palette);
+  };
+
+  const copyUrl = (url) => {
+    navigator.clipboard.writeText(url);
+    setShowToastUrl(true);
+    setTimeout(() => {
+      setShowToastUrl(false);
+    }, 2000);
+  };
+
   useEffect(() => {
     if (user?.uid) {
       const db = getDatabase();
       const favoriteColorsRef = ref(db, `favoriteColors/${user.uid}`);
+      const favoritePalettesRef = ref(db, `favoritePalettes/${user.uid}`);
 
       onValue(favoriteColorsRef, (snapshot) => {
         const data = snapshot.val();
         if (data) {
           const colorsArray = Object.entries(data).map(([key, color]) => ({
             ...color,
-            key, // Agregar la clave única al objeto del color
+            key,
           }));
           setFavColors(colorsArray);
         } else {
           setFavColors([]);
+        }
+      });
+
+      onValue(favoritePalettesRef, (snapshot) => {
+        const data = snapshot.val();
+        if (data) {
+          const palettesArray = Object.entries(data).map(([key, palette]) => ({
+            ...palette,
+            key,
+          }));
+          setFavPalettes(palettesArray);
+        } else {
+          setFavPalettes([]);
         }
       });
     }
@@ -60,24 +103,66 @@ const Dashboard = () => {
 
     // 2. Eliminar el color de Firebase
     const colorRef = ref(db, `favoriteColors/${user.uid}/${colorToDelete.key}`);
-    remove(colorRef)
-      .then(() => {
-        console.log("Color eliminado de Firebase correctamente");
 
-        // 3. Actualizar el estado local
-        const updatedColors = favColors.filter(
-          (color) => color.colorHex !== hex,
-        );
-        setFavColors(updatedColors);
-      })
-      .catch((error) => {
-        console.error("Error al eliminar el color de Firebase:", error);
-      });
+    setTimeout(() => {
+      remove(colorRef)
+        .then(() => {
+          console.log("Color eliminado de Firebase correctamente");
+
+          // 3. Actualizar el estado local
+          const updatedColors = favColors.filter(
+            (color) => color.colorHex !== hex,
+          );
+          setFavColors(updatedColors);
+        })
+        .catch((error) => {
+          console.error("Error al eliminar el color de Firebase:", error);
+        });
+    }, 200);
+    setShowDeleteColorModal(false);
   };
+
+  const handleDeletePalette = (key) => {
+    if (!user?.uid) return;
+
+    const db = getDatabase();
+
+    // 1. Encontrar el color en el estado local para obtener su clave única (key)
+    const paletteToDelete = favPalettes.find((palette) => palette.key === key);
+    if (!paletteToDelete || !paletteToDelete.key) return; // Si no se encuentra el color, salir
+    console.log(paletteToDelete.key);
+
+    // 2. Eliminar el color de Firebase
+    const paletteRef = ref(
+      db,
+      `favoritePalettes/${user.uid}/${paletteToDelete.key}`,
+    );
+
+    setTimeout(() => {
+      remove(paletteRef)
+        .then(() => {
+          console.log("Color eliminado de Firebase correctamente");
+
+          // 3. Actualizar el estado local
+          const updatedPalettes = favPalettes.filter(
+            (palette) => palette.key !== key,
+          );
+          setFavPalettes(updatedPalettes);
+        })
+        .catch((error) => {
+          console.error("Error al eliminar la paleta de Firebase:", error);
+        });
+    }, 200);
+    setShowDeletePaletteModal(false);
+  };
+
+  console.log(palette.key);
 
   return (
     <>
-      <Navbar />
+      <div className="sticky top-0 z-50 ">
+        <Navbar />
+      </div>
       <div>
         <button
           data-drawer-target="default-sidebar"
@@ -142,7 +227,7 @@ const Dashboard = () => {
           </div>
         </aside>
 
-        <div className="p-4 md:ml-64">
+        <div className=" p-4 md:ml-64">
           {showLikedColors && (
             <>
               {user && (
@@ -160,10 +245,20 @@ const Dashboard = () => {
                     key={index}
                     color={color.colorHex}
                     colorName={color.colorName}
-                    onDelete={() => handleDeleteColor(color.colorHex)}
+                    onDelete={() =>
+                      toggleDeleteModal(color.colorHex, color.colorName)
+                    }
                   />
                 ))}
               </div>
+              {console.log(showDeleteCorlorModal)}
+              {showDeleteCorlorModal && (
+                <DeleteColorModal
+                  onCloseButton={toggleDeleteModal}
+                  onDelete={() => handleDeleteColor(colorHex)}
+                  message={colorName}
+                />
+              )}
             </>
           )}
 
@@ -176,9 +271,30 @@ const Dashboard = () => {
                   {user.displayName || user.email}
                 </h1>
               )}
-
-              <p>Hola</p>
+              <div className="p-4 flex flex-col items-center sm:grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                {favPalettes.map((palette, index) => (
+                  <CardPaletteSaved
+                    key={index}
+                    colors={palette.colors}
+                    namePalette={palette.name}
+                    description={palette.description}
+                    onDelete={() => toggleDeletePaletteModal(palette)}
+                    onCopy={() => copyUrl(palette.url)}
+                    palette={palette}
+                  />
+                ))}
+              </div>
             </>
+          )}
+          {showDeletePaletteModal && (
+            <DeletePaletteModal
+              onCloseButton={toggleDeletePaletteModal}
+              onDelete={() => handleDeletePalette(palette.key)}
+              message={palette.name}
+            />
+          )}
+          {showToastUrl && (
+            <SuccessToast message={"URL copiada al portapapeles"} />
           )}
         </div>
       </div>
