@@ -124,7 +124,7 @@ export const Navbar = ({ onToggleUrl, onToggleSavePalette }) => {
                   <div className="absolute z-50 right-0 mt-2 w-44 bg-white rounded-lg shadow-lg">
                     <div className="px-4 py-3 text-xs text-gray-900">
                       {user ? <div>{user.displayName}</div> : null}
-                      <div className="text-sm">{user.email}</div>
+                      <div className="text-sm truncate">{user.email}</div>
                     </div>
                     <ul className="py-2 text-sm text-gray-700">
                       <li>
