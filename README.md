@@ -7,7 +7,7 @@
 ![GitHub top language](https://img.shields.io/github/languages/top/retrovertigo1981/colorPaletteGenerator)
 
 
-**Colorsitos.app** es una aplicación web elegante y moderna que te permite crear paletas de colores armónicas con un solo clic. Diseñada para inspirar creatividad y facilitar el diseño, esta herramienta combina tecnología de punta con una interfaz intuitiva y responsive. ¡Explora, personaliza y guarda tus colores favoritos como nunca antes!
+**Colorsitos.app** es una aplicación web elegante y moderna que te permite crear paletas de colores armónicas con un solo clic. Diseñada para inspirar creatividad y facilitar el diseño, esta herramienta combina tecnología de punta con una interfaz intuitiva y responsive. ¡Explora, personaliza y guarda tus colores favoritos!
 
 ---
 
@@ -35,7 +35,7 @@
 - **Librerías Clave**:
   - `chroma-js` - Generación y manipulación de colores.
   - `color-name-list` - Amplia base de nombres de colores.
-  - `html2pdf.js` y `jspdf` - Exportación a PDF.
+  - `jspdf` - Exportación a PDF.
 - **Herramientas de Desarrollo**:
   - Vite - Empaquetado ultrarrápido.
   - ESLint y Prettier - Código limpio y consistente.
@@ -49,12 +49,12 @@
 
 1. **Clona el repositorio**:
    ```bash
-   git clone https://github.com/retrovertigo1981/colorsitos-app.git
+   git clone https://github.com/retrovertigo1981/colorPaletteGenerator.git
    ```
 
 2. **Accede al directorio**:
 ```bash
-    cd colorsitos-app
+    cd colorPaletteGenerator
  ```
 
 3. **Instala las dependencias**:
@@ -70,7 +70,7 @@ Para lanzar la aplicación en modo desarrollo:
 npm run dev
 ```
 
-Abre tu navegador en http://localhost:3000 y ¡comienza a generar colores!
+Abre tu navegador en http://localhost:5173 y ¡comienza a generar colores!
 
 ---
 
@@ -112,7 +112,7 @@ Este proyecto está bajo la Licencia MIT. Siéntete libre de usarlo, modificarlo
 
 ## 👨‍💻 Autor
 
-Creado con ❤️ por Sebastián Peña, un apasionado desarrollador full-stack que ama transformar ideas en código.
+Creado con ❤️ por Sebastián Peña, un desarrollador full-stack JavaScript que ama transformar ideas en código.
 
 - 🌐 [LinkedIn](https://www.linkedin.com/in/sebastianpenaj/)
 - 🐙 [GitHub](https://github.com/retrovertigo1981)
