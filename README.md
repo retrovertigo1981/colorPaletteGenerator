@@ -34,7 +34,6 @@
   - Firebase - Autenticación y almacenamiento en tiempo real.
 - **Librerías Clave**:
   - `chroma-js` - Generación y manipulación de colores.
-  - `color-name-list` - Amplia base de nombres de colores.
   - `jspdf` - Exportación a PDF.
 - **Herramientas de Desarrollo**:
   - Vite - Empaquetado ultrarrápido.
