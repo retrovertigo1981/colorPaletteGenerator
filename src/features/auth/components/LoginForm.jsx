@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { useAuth } from "../hooks/useAuth";
 import { Link, useNavigate } from "react-router-dom";
-import { Alert } from "./Alert";
+import { Alert } from "../../../components/UI/Alert";
 
-const LoginComponent = () => {
+const LoginForm = () => {
   const [user, setUser] = useState({
     email: "",
     password: "",
@@ -25,16 +25,33 @@ const LoginComponent = () => {
   const handleGoogleLogin = async (e) => {
     e.preventDefault();
     setShowAlert(false);
-    await loginWithGoogle();
-    navigate("/generate");
+    try {
+      await loginWithGoogle();
+      navigate("/generate");
+    } catch (err) {
+      console.error(err);
+      setErrorRegister(
+        "Error al iniciar sesión con Google. Intenta nuevamente.",
+      );
+      setShowAlert(true);
+    }
   };
 
   const handleGithubLogin = async (e) => {
     e.preventDefault();
     setShowAlert(false);
-    await loginWithGithub();
-    navigate("/generate");
+    try {
+      await loginWithGithub();
+      navigate("/generate");
+    } catch (err) {
+      console.error(err);
+      setErrorRegister(
+        "Error al iniciar sesión con GitHub. Intenta nuevamente.",
+      );
+      setShowAlert(true);
+    }
   };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -49,6 +66,7 @@ const LoginComponent = () => {
       setShowAlert(true);
     }
   };
+
   return (
     <>
       <section className="h-screen overflow-y-hidden">
@@ -165,4 +183,4 @@ const LoginComponent = () => {
   );
 };
 
-export { LoginComponent };
+export { LoginForm };

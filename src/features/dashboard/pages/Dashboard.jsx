@@ -1,13 +1,14 @@
 import { useState, useEffect } from "react";
 import { getDatabase, ref, onValue, remove } from "firebase/database";
-import { Navbar } from "../components/Navbar";
+import { Navbar } from "../../../components/layout/Navbar";
+import { Alert } from "../../../components/UI/Alert";
 import { DeleteColorModal } from "../components/DeleteColorModal";
 import { DeletePaletteModal } from "../components/DeletePaletteModal";
 import { CardColorFavorite } from "../components/CardColorFavorite";
 import { CardPaletteSaved } from "../components/CardPaletteSaved";
-import { SuccessToast } from "../components/SuccessToast";
+import { SuccessToast } from "../../../components/UI/SuccessToast";
 import { LayoutDashboard, PaintBucket, Palette } from "lucide-react";
-import { useAuth } from "../hooks/useAuth";
+import { useAuth } from "../../auth/hooks/useAuth";
 
 const Dashboard = () => {
   const [favColors, setFavColors] = useState([]);
@@ -21,6 +22,7 @@ const Dashboard = () => {
   const [colorHex, setColorHex] = useState("");
   const [colorName, setColorName] = useState("");
   const [palette, setPalette] = useState("");
+  const [showAlert, setShowAlert] = useState(false);
   const { user } = useAuth();
 
   const toggleSidebar = () => {
@@ -64,31 +66,45 @@ const Dashboard = () => {
       const favoriteColorsRef = ref(db, `favoriteColors/${user.uid}`);
       const favoritePalettesRef = ref(db, `favoritePalettes/${user.uid}`);
 
-      onValue(favoriteColorsRef, (snapshot) => {
-        const data = snapshot.val();
-        if (data) {
-          const colorsArray = Object.entries(data).map(([key, color]) => ({
-            ...color,
-            key,
-          }));
-          setFavColors(colorsArray);
-        } else {
-          setFavColors([]);
-        }
-      });
+      const getColors = onValue(
+        favoriteColorsRef,
+        (snapshot) => {
+          const data = snapshot.val();
+          setFavColors(
+            data
+              ? Object.entries(data).map(([key, color]) => ({ ...color, key }))
+              : [],
+          );
+        },
+        (error) => {
+          console.error("Error al cargar colores favoritos:", error);
+          setShowAlert(true);
+        },
+      );
 
-      onValue(favoritePalettesRef, (snapshot) => {
-        const data = snapshot.val();
-        if (data) {
-          const palettesArray = Object.entries(data).map(([key, palette]) => ({
-            ...palette,
-            key,
-          }));
-          setFavPalettes(palettesArray);
-        } else {
-          setFavPalettes([]);
-        }
-      });
+      const getPalettes = onValue(
+        favoritePalettesRef,
+        (snapshot) => {
+          const data = snapshot.val();
+          setFavPalettes(
+            data
+              ? Object.entries(data).map(([key, palette]) => ({
+                  ...palette,
+                  key,
+                }))
+              : [],
+          );
+        },
+        (error) => {
+          console.error("Error al cargar paletas favoritas:", error);
+          setShowAlert(true);
+        },
+      );
+
+      return () => {
+        getColors();
+        getPalettes();
+      };
     }
   }, [user]);
 
@@ -298,6 +314,13 @@ const Dashboard = () => {
           )}
         </div>
       </div>
+      {showAlert && (
+        <Alert
+          message="No se pudieron cargar los datos. Intenta recargar la página."
+          onClose={() => setShowAlert(false)}
+          variant="error"
+        />
+      )}
     </>
   );
 };

@@ -1,27 +1,29 @@
 import { useState, useEffect, useCallback } from "react";
 import { useNavigate, useParams, useLocation } from "react-router-dom";
-import { Navbar } from "../components/Navbar.jsx";
-import { ColorPalette } from "../components/ColorPalette.jsx";
-import { Footer } from "../components/Footer.jsx";
+import { Navbar } from "../components/layout/Navbar.jsx";
+import { Footer } from "../components/layout/Footer.jsx";
+import { ColorPalette } from "../features/palette/components/ColorPalette.jsx";
+import { LikedColorModal } from "../features/palette/components/LikedColorModal.jsx";
+import { SavePalette } from "../features/palette/components/SavePalette.jsx";
+import { CopyPaletteUrl } from "../features/palette/components/CopyPaletteUrl.jsx";
+import { Spinner } from "../components/UI/Spinner.jsx";
+import { UserInfoToast } from "../components/shared/UserInfoToast.jsx";
+import { SuccessToast } from "../components/UI/SuccessToast.jsx";
+import { Alert } from "../components/UI/Alert.jsx";
 import { generatePalette } from "../utils/generatePalette.js";
 import { getFontColorByLightness } from "../utils/getFontColorByLightness";
 import { fetchColorName } from "../utils/fetchColorName.js";
 import { useIsMobile } from "../hooks/useIsMobile.js";
-import { Spinner } from "../components/Spinner.jsx";
-import { UserInfoToast } from "../components/UserInfoToast.jsx";
-import { LikedColorModal } from "../components/LikedColorModal.jsx";
-import { SuccessToast } from "../components/SuccessToast.jsx";
-import { CopyPaletteUrl } from "../components/CopyPaletteUrl.jsx";
-import { SavePalette } from "../components/SavePalette.jsx";
-import { Alert } from "../components/Alert.jsx";
+
 import { Keyboard, Save } from "lucide-react";
-import { useAuth } from "../hooks/useAuth";
+import { useAuth } from "../features/auth/hooks/useAuth.js";
 
 const App = () => {
   const [colors, setColors] = useState(new Array(5).fill(""));
   const [colorNames, setColorNames] = useState(new Array(5).fill(""));
   const [blockedColors, setBlockedColors] = useState(new Array(5).fill(false));
   const [likedColors, setLikedColors] = useState([]);
+  const [errorMessage, setErrorMessage] = useState("");
   const [showColorModal, setShowColorModal] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [showModal, setShowModal] = useState(true);
@@ -48,19 +50,19 @@ const App = () => {
   const generateNewPalette = useCallback(async () => {
     setIsLoading(true);
     try {
-      const newPalette = colors.map((color, index) => {
-        return blockedColors[index] ? color : generatePalette()[index];
-      });
-
+      const newPalette = colors.map((color, index) =>
+        blockedColors[index] ? color : generatePalette()[index],
+      );
       const newColorNames = await Promise.all(
         newPalette.map(async (color) => await fetchColorName(color)),
       );
-
       setColors(newPalette);
       setColorNames(newColorNames);
       updateUrlWithColors(newPalette);
     } catch (error) {
       console.error("Error al generar la paleta:", error);
+      setShowAlert(true);
+      setErrorMessage("No se pudo generar la paleta. Intenta nuevamente.");
     } finally {
       setIsLoading(false);
     }
@@ -146,7 +148,6 @@ const App = () => {
 
   const handleCloseAlert = () => {
     setShowAlert(false);
-    // console.log(showAlert);
   };
 
   const toggleShowCopyURL = () => {
@@ -237,6 +238,13 @@ const App = () => {
           onClose={toggleSavePalette}
           onSave={handleSave}
           fullUrl={fullUrl}
+        />
+      )}
+      {showAlert && (
+        <Alert
+          message={errorMessage}
+          onClose={() => setShowAlert(false)}
+          variant="error"
         />
       )}
     </div>

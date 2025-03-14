@@ -8,7 +8,7 @@ import {
   GithubAuthProvider,
   signInWithPopup,
 } from "firebase/auth";
-import { auth } from "../utils/firebase";
+import { auth } from "../../../config/firebase.js";
 import { useEffect, useState } from "react";
 
 export function AuthProvider({ children }) {

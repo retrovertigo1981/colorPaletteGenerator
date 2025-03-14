@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { Menu, X, LogIn, LogOut, Share2, CloudUpload } from "lucide-react";
-import { useAuth } from "../hooks/useAuth";
+import { useAuth } from "../../features/auth/hooks/useAuth";
 
 export const Navbar = ({ onToggleUrl, onToggleSavePalette }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);

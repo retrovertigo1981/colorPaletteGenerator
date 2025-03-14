@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useAuth } from "../hooks/useAuth";
+import { useAuth } from "../../features/auth/hooks/useAuth";
 import { useLocation } from "react-router-dom";
 import { Share2, CloudUpload } from "lucide-react";
 

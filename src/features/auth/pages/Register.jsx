@@ -1,6 +1,6 @@
-import { RegisterComponent } from "../components/RegisterComponent";
-import { AnimatedGradientBackground } from "../components/AnimatedGradientBackground";
-import { useIsMobile } from "../hooks/useIsMobile";
+import { RegisterForm } from "../components/RegisterForm";
+import { AnimatedGradientBackground } from "../../../components/shared/AnimatedGradientBackground";
+import { useIsMobile } from "../../../hooks/useIsMobile";
 
 const Register = () => {
   const isMobile = useIsMobile();
@@ -8,7 +8,7 @@ const Register = () => {
     <>
       <div className="md:grid grid-cols-2">
         <div>
-          <RegisterComponent />
+          <RegisterForm />
         </div>
         <div>{!isMobile && <AnimatedGradientBackground />}</div>
       </div>

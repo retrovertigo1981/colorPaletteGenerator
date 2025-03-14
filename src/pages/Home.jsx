@@ -1,5 +1,5 @@
-import { Navbar } from "../components/Navbar";
-import { Button } from "../components/Button";
+import { Navbar } from "../components/layout/Navbar";
+import { Button } from "../components/UI/Button";
 import { useNavigate } from "react-router-dom";
 
 const Home = () => {

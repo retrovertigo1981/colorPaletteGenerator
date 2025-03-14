@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Copy, Lock, LockOpen, Heart, CheckCircle2 } from "lucide-react";
-import { useIsMobile } from "../hooks/useIsMobile.js";
+import { useIsMobile } from "../../../hooks/useIsMobile";
 
 const Color = ({ color, colorName, onBlock, isBlocked, onLike, fontColor }) => {
   const [isHovered, setIsHovered] = useState(false);

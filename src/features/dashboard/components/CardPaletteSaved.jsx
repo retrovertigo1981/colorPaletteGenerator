@@ -1,7 +1,6 @@
 import { useState, useRef, useEffect } from "react";
-import { ColorSavePalette } from "./ColorSavePalette";
-import { PDFPaletteExporter } from "./PDFPaletteExporter";
-import { exportToPDF } from "../utils/exportToPDF";
+import { ColorSavePalette } from "../../palette/components/ColorSavePalette";
+import { exportToPDF } from "../../../utils/exportToPDF";
 import { Trash2, EllipsisVertical, Link, FileText } from "lucide-react";
 
 const CardPaletteSaved = ({
@@ -13,7 +12,7 @@ const CardPaletteSaved = ({
   palette,
 }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const [showPDFExporter, setShowPDFExporter] = useState(false);
+
   const toggleButtonRef = useRef(null);
   const dropdownRef = useRef(null);
   console.log(palette);
@@ -108,7 +107,6 @@ const CardPaletteSaved = ({
           )}
         </div>
       </div>
-      {/* {showPDFExporter && <PDFPaletteExporter palette={palette} />} */}
     </div>
   );
 };

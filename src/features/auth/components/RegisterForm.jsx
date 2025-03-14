@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { useAuth } from "../hooks/useAuth";
 import { useNavigate } from "react-router-dom";
-import { Alert } from "./Alert";
+import { Alert } from "../../../components/UI/Alert";
 
-const RegisterComponent = () => {
+const RegisterForm = () => {
   const [user, setUser] = useState({
     email: "",
     password: "",
@@ -164,4 +164,4 @@ const RegisterComponent = () => {
   );
 };
 
-export { RegisterComponent };
+export { RegisterForm };

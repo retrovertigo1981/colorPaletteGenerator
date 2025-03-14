@@ -1,7 +1,7 @@
 import { useState } from "react";
-import { ButtonSpinner } from "./ButtonSpinner";
+import { ButtonSpinner } from "../../../components/UI/ButtonSpinner";
 import { getDatabase, ref, push, set, get } from "firebase/database";
-import { useAuth } from "../hooks/useAuth";
+import { useAuth } from "../../auth/hooks/useAuth";
 
 const LikedColorModal = ({ onSave, onClick, color }) => {
   const [colorChange, setColorChange] = useState(color);
@@ -21,51 +21,35 @@ const LikedColorModal = ({ onSave, onClick, color }) => {
     setIsSubmitting(true);
     event.preventDefault();
 
-    const newColor = {
-      colorName: colorName,
-      colorHex: colorChange,
-    };
-
+    const newColor = { colorName, colorHex: colorChange };
     if (!user?.uid) {
       console.error("Usuario no autenticado");
       setIsSubmitting(false);
       return;
     }
 
-    // Guardar en Firebase Realtime Database
     const db = getDatabase();
     const favoriteColorsRef = ref(db, `favoriteColors/${user.uid}`);
 
     try {
-      // Usamos get() para obtener los datos una vez
       const snapshot = await get(favoriteColorsRef);
       const data = snapshot.val();
-
-      let colorsArray = [];
-      if (data) {
-        colorsArray = Object.values(data);
-        const isColorDuplicate = colorsArray.some(
-          (color) => color.colorHex === newColor.colorHex,
-        );
-
-        if (isColorDuplicate) {
-          console.error("El color ya existe");
-          setIsSubmitting(false);
-          return;
-        }
+      let colorsArray = data ? Object.values(data) : [];
+      if (colorsArray.some((color) => color.colorHex === newColor.colorHex)) {
+        console.error("El color ya existe");
+        setIsSubmitting(false);
+        return;
       }
 
-      // Guardar el color si no existe
       const newColorRef = push(favoriteColorsRef);
       await set(newColorRef, newColor);
-
-      console.log("Color guardado en Firebase correctamente");
       setIsSubmitting(false);
       onSave();
       onClick();
     } catch (error) {
       console.error("Error al guardar el color en Firebase:", error);
       setIsSubmitting(false);
+      alert("No se pudo guardar el color. Intenta nuevamente.");
     }
   };
 

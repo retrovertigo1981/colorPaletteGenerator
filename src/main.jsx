@@ -2,12 +2,12 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import App from "../src/routes/App";
-import Home from "../src/routes/Home";
-import Dashboard from "./routes/Dashboard";
-import About from "./routes/About";
-import Login from "./routes/Login";
-import Register from "./routes/Register";
-import { AuthProvider } from "./context/AuthContext.jsx";
+import Home from "../src/pages/Home.jsx";
+import Dashboard from "../src/features/dashboard/pages/Dashboard.jsx";
+import About from "../src/pages/About.jsx";
+import Login from "../src/features/auth/pages/Login.jsx";
+import Register from "../src/features/auth/pages/Register.jsx";
+import { AuthProvider } from "../src/features/auth/context/AuthContext.jsx";
 import { ProtectedRoute } from "./utils/ProtectedRoute.jsx";
 import "./index.css";
 

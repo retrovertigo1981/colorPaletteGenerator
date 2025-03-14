@@ -1,8 +1,8 @@
 import { useState } from "react";
-import { getDatabase, ref, push, set } from "firebase/database";
-import { useAuth } from "../hooks/useAuth";
+import { getDatabase, ref, push, set, get } from "firebase/database";
+import { useAuth } from "../../auth/hooks/useAuth";
 import { ColorSavePalette } from "./ColorSavePalette";
-import { ButtonSpinner } from "./ButtonSpinner";
+import { ButtonSpinner } from "../../../components/UI/ButtonSpinner";
 import { X } from "lucide-react";
 
 const SavePalette = ({ onSave, colors, onClose, fullUrl }) => {
@@ -34,15 +34,24 @@ const SavePalette = ({ onSave, colors, onClose, fullUrl }) => {
     const favoritePalettesRef = ref(db, `favoritePalettes/${user.uid}`);
 
     try {
+      const snapshot = await get(favoritePalettesRef);
+      const data = snapshot.val();
+      let palettesArray = data ? Object.values(data) : [];
+      if (palettesArray.some((p) => p.name === newPalette.name)) {
+        console.error("La paleta ya existe");
+        alert("ya existe una paleta con ese nombre, intente con otro");
+        setIsSubmitting(false);
+        return;
+      }
       const newPaletteRef = push(favoritePalettesRef);
       await set(newPaletteRef, newPalette);
-      console.log("Paleta guardada en Firebase correctamente");
       setIsSubmitting(false);
       onClose();
       onSave();
     } catch (error) {
-      console.error("Error al guardar el color en Firebase:", error);
+      console.error("Error al guardar la paleta en Firebase:", error);
       setIsSubmitting(false);
+      alert("No se pudo guardar la paleta. Intenta nuevamente.");
     }
   };
   return (
