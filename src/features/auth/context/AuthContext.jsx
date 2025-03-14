@@ -1,4 +1,4 @@
-import { Authcontext } from "./createContext.js";
+import { AuthContext } from "./createContext.js";
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
@@ -13,6 +13,8 @@ import { useEffect, useState } from "react";
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
+
   const signUp = (email, password) => {
     return createUserWithEmailAndPassword(auth, email, password);
   };
@@ -36,16 +38,26 @@ export function AuthProvider({ children }) {
   };
 
   useEffect(() => {
-    onAuthStateChanged(auth, (currentUser) => {
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
+      setLoading(false); // Cuando Firebase termina de verificar, loading se desactiva
     });
-  });
+    return () => unsubscribe(); // Limpieza del listener
+  }, []);
 
   return (
-    <Authcontext.Provider
-      value={{ signUp, login, user, logout, loginWithGoogle, loginWithGithub }}
+    <AuthContext.Provider
+      value={{
+        signUp,
+        login,
+        user,
+        logout,
+        loginWithGoogle,
+        loginWithGithub,
+        loading,
+      }} // Agregamos loading al contexto
     >
       {children}
-    </Authcontext.Provider>
+    </AuthContext.Provider>
   );
 }
