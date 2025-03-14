@@ -69,7 +69,6 @@ const Sidebar = ({ isSidebarOpen }) => {
                 </span>
               </Link>
             </li>
-            {/* Otros items del menú... */}
           </ul>
         </div>
       </aside>

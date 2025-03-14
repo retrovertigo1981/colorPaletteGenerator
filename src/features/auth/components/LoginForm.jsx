@@ -58,8 +58,6 @@ const LoginForm = () => {
       await login(user.email, user.password);
       navigate("/generate");
     } catch (err) {
-      console.log(err.code);
-
       setErrorRegister(
         "Error, Credenciales Inválidas, por favor verifica tus datos",
       );

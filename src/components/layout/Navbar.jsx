@@ -8,7 +8,7 @@ export const Navbar = ({ onToggleUrl, onToggleSavePalette }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isGenerateUrl, setIsGenerateUrl] = useState(false);
   const { user, logout } = useAuth();
-  // console.log(user);
+
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -18,8 +18,6 @@ export const Navbar = ({ onToggleUrl, onToggleSavePalette }) => {
     } else {
       setIsGenerateUrl(false);
     }
-
-    console.log(isGenerateUrl);
   }, [location, isGenerateUrl]);
 
   const toggleMenu = () => {
@@ -42,7 +40,6 @@ export const Navbar = ({ onToggleUrl, onToggleSavePalette }) => {
   return (
     <nav className="bg-white p-2 sm:p-4 ">
       <div className="flex w-full justify-between items-center">
-        {/* Logo y nombre */}
         <Link to="/" className="inline-block">
           <span className="text-xl sm:text-2xl font-lobster flex items-center">
             <span className="mr-2">

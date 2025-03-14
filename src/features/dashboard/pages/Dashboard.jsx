@@ -113,11 +113,9 @@ const Dashboard = () => {
 
     const db = getDatabase();
 
-    // 1. Encontrar el color en el estado local para obtener su clave única (key)
     const colorToDelete = favColors.find((color) => color.colorHex === hex);
-    if (!colorToDelete || !colorToDelete.key) return; // Si no se encuentra el color, salir
+    if (!colorToDelete || !colorToDelete.key) return;
 
-    // 2. Eliminar el color de Firebase
     const colorRef = ref(db, `favoriteColors/${user.uid}/${colorToDelete.key}`);
 
     setTimeout(() => {
@@ -125,7 +123,6 @@ const Dashboard = () => {
         .then(() => {
           console.log("Color eliminado de Firebase correctamente");
 
-          // 3. Actualizar el estado local
           const updatedColors = favColors.filter(
             (color) => color.colorHex !== hex,
           );
@@ -143,12 +140,9 @@ const Dashboard = () => {
 
     const db = getDatabase();
 
-    // 1. Encontrar el color en el estado local para obtener su clave única (key)
     const paletteToDelete = favPalettes.find((palette) => palette.key === key);
-    if (!paletteToDelete || !paletteToDelete.key) return; // Si no se encuentra el color, salir
-    console.log(paletteToDelete.key);
+    if (!paletteToDelete || !paletteToDelete.key) return;
 
-    // 2. Eliminar el color de Firebase
     const paletteRef = ref(
       db,
       `favoritePalettes/${user.uid}/${paletteToDelete.key}`,
@@ -159,7 +153,6 @@ const Dashboard = () => {
         .then(() => {
           console.log("Color eliminado de Firebase correctamente");
 
-          // 3. Actualizar el estado local
           const updatedPalettes = favPalettes.filter(
             (palette) => palette.key !== key,
           );
@@ -171,8 +164,6 @@ const Dashboard = () => {
     }, 200);
     setShowDeletePaletteModal(false);
   };
-
-  console.log(palette.key);
 
   return (
     <>
@@ -254,7 +245,6 @@ const Dashboard = () => {
                 </h1>
               )}
 
-              {/* Grid de tarjetas de colores */}
               <div className="p-4 flex flex-col items-center sm:grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                 {favColors.map((color, index) => (
                   <CardColorFavorite
@@ -267,7 +257,7 @@ const Dashboard = () => {
                   />
                 ))}
               </div>
-              {console.log(showDeleteCorlorModal)}
+
               {showDeleteCorlorModal && (
                 <DeleteColorModal
                   onCloseButton={toggleDeleteModal}

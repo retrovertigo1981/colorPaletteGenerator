@@ -18,9 +18,9 @@ export const ColorPalette = ({
           colorName={colorNames[index]}
           onBlock={() => onBlockColor(index)}
           isBlocked={blockedColors[index]}
-          isLiked={likedColors.includes(color)} // Pasar si el color está "liked"
-          onLike={() => onLikeColor(color)} // Pasar la función para alternar "like"
-          fontColor={getFontColor(color)} // Pasar la función para obtener color de texto
+          isLiked={likedColors.includes(color)}
+          onLike={() => onLikeColor(color)}
+          fontColor={getFontColor(color)}
         />
       ))}
     </div>

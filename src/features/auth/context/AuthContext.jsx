@@ -40,9 +40,9 @@ export function AuthProvider({ children }) {
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
-      setLoading(false); // Cuando Firebase termina de verificar, loading se desactiva
+      setLoading(false);
     });
-    return () => unsubscribe(); // Limpieza del listener
+    return () => unsubscribe();
   }, []);
 
   return (
@@ -55,7 +55,7 @@ export function AuthProvider({ children }) {
         loginWithGoogle,
         loginWithGithub,
         loading,
-      }} // Agregamos loading al contexto
+      }}
     >
       {children}
     </AuthContext.Provider>

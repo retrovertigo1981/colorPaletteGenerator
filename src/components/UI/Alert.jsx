@@ -1,14 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-// Definimos las props que aceptará nuestro componente
-const Alert = ({
-  message, // Mensaje principal del alert
-  links = [], // Array de objetos con los enlaces
-  onClose, // Función para cerrar el alert
-  variant = "error", // Tipo de alerta (error, warning, info, success)
-}) => {
-  // Objeto con las variantes de color
+const Alert = ({ message, links = [], onClose, variant = "error" }) => {
   const variants = {
     error: {
       border: "border-red-300 dark:border-red-800",

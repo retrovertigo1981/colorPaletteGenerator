@@ -74,7 +74,7 @@ const Color = ({ color, colorName, onBlock, isBlocked, onLike, fontColor }) => {
           />
         </div>
       </div>
-      {/* Nombre del color */}
+
       <span
         className={`${
           fontColor === true ? "text-gray-700" : "text-gray-300"

@@ -35,14 +35,11 @@ const Home = () => {
       </style>
 
       <Navbar />
-      {/* Fondo animado */}
+
       <div className="fixed inset-0 overflow-hidden -z-30">
-        {/* Capa de overlay para mejorar el contraste */}
         <div className="absolute inset-0 bg-black/5 backdrop-blur-xl"></div>
 
-        {/* Burbujas de color animadas */}
         <div className="absolute inset-0">
-          {/* Burbujas con menos desenfoque y más intensidad */}
           <div className="absolute -top-1/4 -left-1/4 w-[150vh] h-[150vh] rounded-full bg-[#2f8edc] float-1 mix-blend-soft-light blur-2xl opacity-90 md:w-[100vw] md:h-[100vw]"></div>
           <div className="absolute top-1/2 -right-1/4 w-[120vh] h-[120vh] rounded-full bg-[#f20de0] float-2 mix-blend-soft-light blur-2xl opacity-80 md:w-[90vw] md:h-[90vw]"></div>
           <div className="absolute -bottom-1/4 left-1/4 w-[130vh] h-[130vh] rounded-full bg-[#6851d2] float-1 mix-blend-soft-light blur-2xl opacity-85 md:w-[95vw] md:h-[95vw]"></div>
@@ -51,7 +48,6 @@ const Home = () => {
         </div>
       </div>
 
-      {/* Contenido principal con mejor contraste */}
       <div className="grid place-content-center h-full fixed inset-0 -z-20">
         <div className="grid place-items-center px-4 md:px-8">
           <h1 className="text-center font-extrabold text-4xl md:text-6xl mb-2 text-white drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)]">

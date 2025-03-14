@@ -32,7 +32,6 @@ const App = () => {
   const [showCopyUrl, setShowCopyUrl] = useState(false);
   const [showToastUrl, setShowToastUrl] = useState(false);
   const [showSavePalette, setShowSavePalette] = useState(false);
-  // console.log(showAlert);
 
   const { user } = useAuth();
   const isMobile = useIsMobile();
@@ -139,10 +138,8 @@ const App = () => {
   };
 
   const handleSave = () => {
-    // Mostrar el toast de guardado
     setShowSuccessToast(true);
 
-    // Ocultar el toast después de 3 segundos
     setTimeout(() => setShowSuccessToast(false), 2000);
   };
 

@@ -15,25 +15,14 @@ const CardPaletteSaved = ({
 
   const toggleButtonRef = useRef(null);
   const dropdownRef = useRef(null);
-  console.log(palette);
 
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
   };
 
   const handleShowPDFExporter = (palette) => {
-    // setShowPDFExporter(true);
     exportToPDF(palette);
   };
-
-  // useEffect(() => {
-  //   if (showPDFExporter) {
-  //     setTimeout(() => {
-  //       exportToPDF();
-  //       setShowPDFExporter(false); // Ocultar el componente después de generar el PDF
-  //     }, 100); // Espera 100ms para que el contenido se renderice
-  //   }
-  // }, [showPDFExporter]);
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -41,7 +30,6 @@ const CardPaletteSaved = ({
         toggleButtonRef.current &&
         dropdownRef.current &&
         !toggleButtonRef.current.contains(event.target)
-        // && !dropdownRef.current.contains(event.target)
       ) {
         setIsDropdownOpen(false);
       }

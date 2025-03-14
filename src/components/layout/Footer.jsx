@@ -18,8 +18,6 @@ export const Footer = ({
     } else {
       setIsGenerateUrl(false);
     }
-
-    console.log(isGenerateUrl);
   }, [location, isGenerateUrl]);
   return (
     <footer className="bg-white text-black p-2 sm:p-4 flex justify-around items-center">

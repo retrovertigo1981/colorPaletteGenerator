@@ -7,12 +7,7 @@ const About = () => {
       <Navbar />
       <section className=" min-h-screen">
         <div className="px-4 md:px-6 h-full pb-12 md:max-w-3xl md:mx-auto">
-          {/* <h2 className="py-5 text-4xl font-bold text-center text-white mb-8">
-            About
-          </h2> */}
-
           <div className="grid md:grid-cols-1 gap-8 pt-8">
-            {/* Sección Personal */}
             <div className="">
               <h3 className="text-2xl font-semibold text-gray-800 mb-4">
                 Hola, soy Sebastián
@@ -45,7 +40,6 @@ const About = () => {
               </div>
             </div>
 
-            {/* Sección Proyecto */}
             <div className="">
               <h3 className="text-2xl font-semibold text-gray-800 mb-4">
                 Sobre el Proyecto

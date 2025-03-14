@@ -42,7 +42,6 @@ const RegisterForm = () => {
       await signUp(user.email, user.password);
       navigate("/");
     } catch (err) {
-      console.log(err.code);
       if (
         err.code === "auth/email-already-in-use" ||
         err.code === "auth/weak-password" ||
