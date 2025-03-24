@@ -29,6 +29,7 @@ const App = () => {
   const [showModal, setShowModal] = useState(true);
   const [showSuccessToast, setShowSuccessToast] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
+  const [showAlertSaveColor, setShowAlertSaveColor] = useState(false);
   const [showCopyUrl, setShowCopyUrl] = useState(false);
   const [showToastUrl, setShowToastUrl] = useState(false);
   const [showSavePalette, setShowSavePalette] = useState(false);
@@ -120,7 +121,7 @@ const App = () => {
   };
 
   const handleLikeColor = (color) => {
-    if (!user) return setShowAlert(true);
+    if (!user) return setShowAlertSaveColor(true);
     const updateLikedColors = likedColors.includes(color)
       ? likedColors.filter((likedColor) => likedColor !== color)
       : [...likedColors, color];
@@ -145,6 +146,7 @@ const App = () => {
 
   const handleCloseAlert = () => {
     setShowAlert(false);
+    setShowAlertSaveColor(false);
   };
 
   const toggleShowCopyURL = () => {
@@ -218,7 +220,7 @@ const App = () => {
         />
       )}
       {showToastUrl && <SuccessToast message={"URL copiada al portapapeles"} />}
-      {showAlert && (
+      {showAlertSaveColor && (
         <Alert
           message="Para guardar un color, primero tienes que"
           links={[
@@ -240,7 +242,7 @@ const App = () => {
       {showAlert && (
         <Alert
           message={errorMessage}
-          onClose={() => setShowAlert(false)}
+          onClose={handleCloseAlert}
           variant="error"
         />
       )}
